@@ -15,7 +15,7 @@ import java.util.List;
 
 public class LoadHBase implements AutoCloseable {
     private static final TableName personDataTableName = TableName.valueOf("PersonalDataCounts");
-    private static final String family = "Family1";
+    private static final String family = "PersonalData";
     private Configuration config;
     private Admin admin;
     private Connection connection;
