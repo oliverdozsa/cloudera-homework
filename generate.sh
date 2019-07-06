@@ -4,7 +4,7 @@ source spinner.sh
 
 usage()
 {
-    echo "usage $0 size output_folder"
+    echo "usage: $0 size output_folder"
     echo "generates size random firsName,lastName,location,birthDate values to output_folder (on hdfs)"
     echo "  size > 0"
 }

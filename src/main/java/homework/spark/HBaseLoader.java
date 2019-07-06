@@ -13,20 +13,22 @@ import java.io.IOException;
 import java.util.List;
 
 class HBaseLoader implements AutoCloseable {
-    private static final TableName personDataTableName = TableName.valueOf("PersonalDataCounts");
-    private static final String family = "PersonalData";
+    private static final String FAMILY = "PersonalData";
+
     private Configuration config;
     private Admin admin;
     private Connection connection;
     private Table personDataTable;
     private int rowNumber = 1;
+    private TableName peopleDataTableName;
 
-    private static final byte[] firstNameQualifier = Bytes.toBytes("firstName");
-    private static final byte[] lastNameQualifier = Bytes.toBytes("lastName");
-    private static final byte[] locationQualifier = Bytes.toBytes("location");
-    private static final byte[] countQualifier = Bytes.toBytes("count");
+    private static final byte[] FIRST_NAME_QUALIFIER = Bytes.toBytes("firstName");
+    private static final byte[] LAST_NAME_QUALIFIER = Bytes.toBytes("lastName");
+    private static final byte[] LOCATION_QUALIFIER = Bytes.toBytes("location");
+    private static final byte[] COUNT_QUALIFIER = Bytes.toBytes("count");
 
-    public HBaseLoader() throws IOException {
+    public HBaseLoader(String tableName) throws IOException {
+        peopleDataTableName = TableName.valueOf(tableName);
         configureHBase();
         connection = ConnectionFactory.createConnection(config);
         admin = connection.getAdmin();
@@ -41,24 +43,24 @@ class HBaseLoader implements AutoCloseable {
 
     private void put(Person data) throws IOException {
         Put p = new Put(Bytes.toBytes("row" + (rowNumber++)));
-        p.addImmutable(family.getBytes(), firstNameQualifier, Bytes.toBytes(data.firstName));
-        p.addImmutable(family.getBytes(), lastNameQualifier, Bytes.toBytes(data.lastName));
-        p.addImmutable(family.getBytes(), locationQualifier, Bytes.toBytes(data.location));
-        p.addImmutable(family.getBytes(), countQualifier, Bytes.toBytes(data.count));
+        p.addImmutable(FAMILY.getBytes(), FIRST_NAME_QUALIFIER, Bytes.toBytes(data.firstName));
+        p.addImmutable(FAMILY.getBytes(), LAST_NAME_QUALIFIER, Bytes.toBytes(data.lastName));
+        p.addImmutable(FAMILY.getBytes(), LOCATION_QUALIFIER, Bytes.toBytes(data.location));
+        p.addImmutable(FAMILY.getBytes(), COUNT_QUALIFIER, Bytes.toBytes(data.count));
         personDataTable.put(p);
     }
 
     private void dropAndCreateTable() throws IOException {
-        if (admin.tableExists(personDataTableName)) {
-            admin.disableTable(personDataTableName);
-            admin.deleteTable(personDataTableName);
+        if (admin.tableExists(peopleDataTableName)) {
+            admin.disableTable(peopleDataTableName);
+            admin.deleteTable(peopleDataTableName);
         }
 
-        HTableDescriptor desc = new HTableDescriptor(personDataTableName);
-        desc.addFamily(new HColumnDescriptor(family));
+        HTableDescriptor desc = new HTableDescriptor(peopleDataTableName);
+        desc.addFamily(new HColumnDescriptor(FAMILY));
         admin.createTable(desc);
 
-        personDataTable = connection.getTable(personDataTableName);
+        personDataTable = connection.getTable(peopleDataTableName);
     }
 
     @Override

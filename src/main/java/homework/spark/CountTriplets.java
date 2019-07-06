@@ -10,10 +10,13 @@ import java.util.List;
 
 public class CountTriplets {
     public static void main(String[] args) throws Exception {
-        if (args.length < 1) {
-            System.err.println("Usage: CountTriplets <file>");
+        if (args.length != 2) {
+            System.err.println("Usage: CountTriplets <path> <table_name>");
             System.exit(1);
         }
+
+        String inputPath = args[0];
+        String tableName = args[1];
 
         SparkSession spark = SparkSession
                 .builder()
@@ -21,7 +24,7 @@ public class CountTriplets {
                 .getOrCreate();
 
         // Read all part-* files.
-        JavaRDD<String> lines = spark.read().textFile(args[0] + "/part-*").javaRDD();
+        JavaRDD<String> lines = spark.read().textFile(ensureTrailingSlash(inputPath) + "part-*").javaRDD();
         JavaPairRDD<String, Integer> ones = lines.mapToPair(s -> {
             // Birthdate is the last part, but we don't need that.
             String result = s.substring(0, s.lastIndexOf(","));
@@ -38,12 +41,20 @@ public class CountTriplets {
             people.add(new Person(tuple._1(), tuple._2()));
         }
 
-        try (HBaseLoader hBaseLoader = new HBaseLoader()) {
+        try (HBaseLoader hBaseLoader = new HBaseLoader(tableName)) {
             hBaseLoader.put(people);
         }
 
-        PhoenixMappingTable.create();
+        new PhoenixMappingTable(tableName).create();
 
         spark.stop();
+    }
+
+    private static String ensureTrailingSlash(String path){
+        if(!path.endsWith("/")){
+            return path + "/";
+        }
+
+        return path;
     }
 }
