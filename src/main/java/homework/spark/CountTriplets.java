@@ -20,10 +20,11 @@ public class CountTriplets {
                 .appName("CountTriplets")
                 .getOrCreate();
 
-        JavaRDD<String> lines = spark.read().textFile(args[0]).javaRDD();
+        // Read all part-* files.
+        JavaRDD<String> lines = spark.read().textFile(args[0] + "/part-*").javaRDD();
         JavaPairRDD<String, Integer> ones = lines.mapToPair(s -> {
             // Birthdate is the last part, but we don't need that.
-            String result = s.substring(0, s.lastIndexOf(";"));
+            String result = s.substring(0, s.lastIndexOf(","));
             return new Tuple2<>(result, 1);
         });
 

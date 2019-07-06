@@ -34,7 +34,7 @@ public class GeneratePeople extends Configured implements Tool {
                 int locationIndex = new Random().nextInt(LOCATIONS.length);
                 int birthDate = new Random().nextInt(5) + 1980;
 
-                StringJoiner resultJoiner = new StringJoiner(";");
+                StringJoiner resultJoiner = new StringJoiner(",");
                 resultJoiner.add(FIRST_NAMES[firstNameIndex]);
                 resultJoiner.add(LAST_NAMES[lastNameIndex]);
                 resultJoiner.add(LOCATIONS[locationIndex]);
