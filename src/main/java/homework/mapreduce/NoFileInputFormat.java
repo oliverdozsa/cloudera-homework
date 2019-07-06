@@ -35,12 +35,12 @@ class NoFileInputFormat extends InputFormat<Text, Text> {
      * Return a single record (filename, "") where the filename is taken from
      * the file split.
      */
-    static class RandomRecordReader extends RecordReader<Text, Text> {
+    static class NoFileInputRecordReader extends RecordReader<Text, Text> {
         Path name;
         Text key = null;
         Text value = new Text();
 
-        public RandomRecordReader(Path p) {
+        public NoFileInputRecordReader(Path p) {
             name = p;
         }
 
@@ -77,6 +77,6 @@ class NoFileInputFormat extends InputFormat<Text, Text> {
 
     public RecordReader<Text, Text> createRecordReader(InputSplit split,
                                                        TaskAttemptContext context) throws IOException, InterruptedException {
-        return new RandomRecordReader(((FileSplit) split).getPath());
+        return new NoFileInputRecordReader(((FileSplit) split).getPath());
     }
 }

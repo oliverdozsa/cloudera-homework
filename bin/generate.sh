@@ -7,6 +7,8 @@ usage()
     echo "usage: $0 size output_folder"
     echo "generates [size] random firsName,lastName,location,birthDate values to [output_folder] (on hdfs)"
     echo "  size > 0"
+    echo "example: $0 100 /tmp/homework"
+    echo "if something's not working check the log file 'generate.log'"
 }
 
 

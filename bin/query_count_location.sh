@@ -24,7 +24,7 @@ contains locations "$2"
 if [[ $? -eq 0 ]]; then
     echo "Running query..."
     start_spin
-    echo "select sum(\"count\") from \"$1\" where \"location\"='$2';" | /usr/hdp/current/phoenix-client/bin/sqlline.py localhost:2181/hbase-unsecure 2>&1 | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" | grep -E "(\+.*|\|.*)"
+    echo "select sum(\"count\") from \"$1\" where \"location\"='$2';" | /usr/hdp/current/phoenix-client/bin/sqlline.py localhost:2181/hbase-unsecure 2>&1 | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" | grep -E "(\+.*|\|.*|.*ERROR.*)"
 else
     usage
 fi

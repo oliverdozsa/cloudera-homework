@@ -58,7 +58,7 @@ public class GeneratePeople extends Configured implements Tool {
         conf.setInt(MRJobConfig.NUM_MAPS, 1);
 
         job.setJarByClass(GeneratePeople.class);
-        job.setJobName("generate-names");
+        job.setJobName("generate-people");
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);

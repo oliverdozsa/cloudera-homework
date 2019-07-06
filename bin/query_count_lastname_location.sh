@@ -27,7 +27,7 @@ if [[ $? -eq 0 ]]; then
     if [[ $? -eq 0 ]]; then
         echo "Running query..."
         start_spin
-        echo "SELECT SUM(\"count\") FROM \"$1\" WHERE \"location\"='$3' AND \"lastName\"='$2';" | /usr/hdp/current/phoenix-client/bin/sqlline.py localhost:2181/hbase-unsecure 2>&1 | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" | grep -E "(\+.*|\|.*)"
+        echo "SELECT SUM(\"count\") FROM \"$1\" WHERE \"location\"='$3' AND \"lastName\"='$2';" | /usr/hdp/current/phoenix-client/bin/sqlline.py localhost:2181/hbase-unsecure 2>&1 | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" | grep -E "(\+.*|\|.*|.*ERROR.*)"
     else
         usage
     fi

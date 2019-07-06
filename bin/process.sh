@@ -6,6 +6,8 @@ usage()
 {
     echo "usage: $0 input_folder table_name"
     echo "processes the result of generate.sh in [input_folder] (on hdfs), and creates the table [table_name] in HBase and Phoenix"
+    echo "example: $0 /tmp/homework PeopleTable"
+    echo "if something's not working check the log file 'process.log'"
 }
 
 if [[ $# -ne 2 ]]; then
