@@ -8,12 +8,11 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
-import scala.Tuple2;
 
 import java.io.IOException;
 import java.util.List;
 
-public class LoadHBase implements AutoCloseable {
+class HBaseLoader implements AutoCloseable {
     private static final TableName personDataTableName = TableName.valueOf("PersonalDataCounts");
     private static final String family = "PersonalData";
     private Configuration config;
@@ -27,7 +26,7 @@ public class LoadHBase implements AutoCloseable {
     private static final byte[] locationQualifier = Bytes.toBytes("location");
     private static final byte[] countQualifier = Bytes.toBytes("count");
 
-    public LoadHBase() throws IOException {
+    public HBaseLoader() throws IOException {
         configureHBase();
         connection = ConnectionFactory.createConnection(config);
         admin = connection.getAdmin();
@@ -78,18 +77,4 @@ public class LoadHBase implements AutoCloseable {
         config.addResource(new Path(path));
     }
 
-    public static class Person {
-        public String firstName;
-        public String lastName;
-        public String location;
-        public Integer count;
-
-        public Person(String csvData, Integer count) {
-            String[] fields = csvData.split(";");
-            firstName = fields[0];
-            lastName = fields[1];
-            location = fields[2];
-            this.count = count;
-        }
-    }
 }

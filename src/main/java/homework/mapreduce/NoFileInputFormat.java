@@ -10,7 +10,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-class RandomInputFormat extends InputFormat<Text, Text> {
+// Based on: https://github.com/apache/hadoop/blob/trunk/hadoop-mapreduce-project/hadoop-mapreduce-examples/src/main/java/org/apache/hadoop/examples/RandomWriter.java
+class NoFileInputFormat extends InputFormat<Text, Text> {
 
     /**
      * Generate the requested number of file splits, with the filename
@@ -19,12 +20,14 @@ class RandomInputFormat extends InputFormat<Text, Text> {
     public List<InputSplit> getSplits(JobContext job) {
         List<InputSplit> result = new ArrayList<>();
         Path outDir = FileOutputFormat.getOutputPath(job);
+
         // One split
         int numSplits = 1;
-        for(int i=0; i < numSplits; ++i) {
+        for (int i = 0; i < numSplits; ++i) {
             result.add(new FileSplit(new Path(outDir, "dummy-split-" + i), 0, 1,
-                    (String[])null));
+                    null));
         }
+
         return result;
     }
 
@@ -36,6 +39,7 @@ class RandomInputFormat extends InputFormat<Text, Text> {
         Path name;
         Text key = null;
         Text value = new Text();
+
         public RandomRecordReader(Path p) {
             name = p;
         }
@@ -63,7 +67,8 @@ class RandomInputFormat extends InputFormat<Text, Text> {
             return value;
         }
 
-        public void close() {}
+        public void close() {
+        }
 
         public float getProgress() {
             return 0.0f;
