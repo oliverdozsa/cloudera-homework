@@ -26,4 +26,8 @@ echo -n "Generating random data to $2 on HDFS..."
 start_spin
 hadoop fs -rm -r $2 > generate_log.txt 2>&1
 hadoop jar homework.jar homework.mapreduce.GeneratePeople -Dmapreduce.generatenames.size=$1 $2 >> generate.log 2>&1
-echo "done"
+if [[ $? -eq 0 ]]; then
+    echo "done"
+else
+    echo "failed! Please check logs."
+fi
